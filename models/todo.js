@@ -12,6 +12,33 @@ module.exports = (sequelize, DataTypes) => {
         static async addTask(params) {
             return await Todo.create(params);
         }
+        static async showList() {
+            console.log("My Todo list \n");
+
+            console.log("Overdue");
+            // FILL IN HERE
+            const listsOverdue = await Todo.overdue();
+            console.log(
+                listsOverdue.map((data) => data.displayableString()).join("\n")
+            );
+            console.log("\n");
+
+            console.log("Due Today");
+            // FILL IN HERE
+
+            const listsDueToday = await Todo.dueToday();
+            console.log(
+                listsDueToday.map((data) => data.displayableString()).join("\n")
+            );
+            console.log("\n");
+
+            console.log("Due Later");
+            // FILL IN HERE
+            const listsDueLater = await Todo.dueLater();
+            console.log(
+                listsDueLater.map((data) => data.displayableString()).join("\n")
+            );
+        }
 
         static async overdue() {
             // FILL IN HERE TO RETURN OVERDUE ITEMS
@@ -22,34 +49,6 @@ module.exports = (sequelize, DataTypes) => {
                     },
                 },
             });
-        }
-
-        static async showList() {
-            console.log("My Todo list \n");
-
-            console.log("Overdue");
-            // FILL IN HERE
-            const listOverdue = await Todo.overdue();
-            console.log(
-                listOverdue.map((data) => data.stringFormat()).join("\n")
-            );
-            console.log("\n");
-
-            console.log("Due Today");
-            // FILL IN HERE
-
-            const dueListsToday = await Todo.dueToday();
-            console.log(
-                dueListsToday.map((data) => data.stringFormat()).join("\n")
-            );
-            console.log("\n");
-
-            console.log("Due Later");
-            // FILL IN HERE
-            const dueListsLater = await Todo.dueLater();
-            console.log(
-                dueListsLater.map((data) => data.stringFormat()).join("\n")
-            );
         }
 
         static async dueToday() {
@@ -86,13 +85,13 @@ module.exports = (sequelize, DataTypes) => {
             );
         }
 
-        stringFormat() {
-            let checkbox = this.completed ? "[x]" : "[ ]";
-            let date =
+        displayableString() {
+            let given_checkbox = this.completed ? "[x]" : "[ ]";
+            let dateFormat =
                 this.dueDate === new Date().toLocaleDateString("en-CA")
                     ? ""
                     : ` ${this.dueDate}`;
-            return `${this.id}. ${checkbox} ${this.title}${date}`;
+            return `${this.id}. ${given_checkbox} ${this.title}${dateFormat}`;
         }
     }
     Todo.init(
